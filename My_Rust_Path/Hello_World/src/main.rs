@@ -10,9 +10,7 @@
 
 fn main() {
     let name = "Skshm";
-    let (x,y) = (8,2);
 
     println!("Hello, world!");
-    println!("Adding: {}", x+y);
     println!("My name {}", name);
 }
