@@ -1,0 +1,17 @@
+#+title: Learning the Nannou framework
+
+* Why Nannou
+Its similar to processing and uses rust.
+It has audio and video input, playback and processing. As well as the usual GUI, geomerty and graphics.
+And help me learn rust AND graphics programming at the same time. More info [[https:guide.nannou.cc/why_nannou.html][here]]
+
+* Sources
++ [[https://nannou.cc/][nannou]] - Creative Coding Framework
+  - [[https:youtube.com/watch?v=p-axai_Wuec][Video]] follow along
++ [[https://guide.nannou.cc/getting_started/running_examples.html][Tutorial Book]]
++ [[https://github.com/sidwellr/schotter][tutorial based on Schotter]]
+
+* Setup
+1. Ofcourse install and setup rust.
+2. Aquire alsa-lib-devel
+   
