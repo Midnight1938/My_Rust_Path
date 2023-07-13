@@ -1,5 +1,5 @@
 [package]
-name = "fps-wolf"
+name = "raycaster"
 version = "0.1.0"
 edition = "2021"
 
@@ -17,14 +17,3 @@ panic = "abort"
 
 [dependencies]
 libm = "0.2"
-
-[build]
-target = "wasm32-unknown-unknown"
-
-[target.wasm32-unknown-unknown]
-rustflags = [
-    "-C", "link-arg=--import-memory",
-    "-C", "link-arg=--initial-memory=65536",
-    "-C", "link-arg=--max-memory=65536",
-    "-C", "link-arg=-zstack-size=14752",
-]
