@@ -1,0 +1,92 @@
+#+title: Memory Management in rust
+#+date: <2023-07-31 Mon>
+#+author: Skshm
+
+* Table Of Contents :toc:
+- [[#stacks-and-heaps][Stacks and Heaps]]
+  - [[#stacks][Stacks]]
+  - [[#heap][Heap]]
+  - [[#example-a-string][Example, a string]]
+- [[#memory-management][Memory Management]]
+  - [[#manual-memory-management][Manual Memory Management]]
+  - [[#scope-based-management][Scope based management]]
+  - [[#automatic-memory-management][Automatic Memory Management]]
+  - [[#rust-memory-management][Rust Memory Management]]
+  - [[#compare-management-techniques][Compare management techniques]]
+
+* Stacks and Heaps
+** Stacks
+These are a continuous area of memory for a variable. Like i32, bool, etc.
++ Each value has a fixed size and is known at compile time
++ The stack has a movable pointer to find values
++ Follows function calls
+  The values are pushed to the stack, when a function is called.
++ Great Memory locality
+  The values are close to each other, so its easy to poke them.
+** Heap
+Storage of values outside of function calls. Like, a vector.
++ Size is not known at compile time.
++ Values have dynamic sizes determined at runtime.
++ Slightly slower than the stack, some book-keeping needed.
++ No guarantee of memory locality.
+** Example, a string
+Creating a String, puts fixed-sized metadata on the stack, and dynamically sized data, the actual string, on the heap:
+A String is backed by a Vec, so it has a capacity and length and can grow if mutable via reallocation on the heap.
+#+begin_src rust
+  fn main() {
+      let s1 = String::from("Hello");
+  }
+#+end_src
+
+* Memory Management
+** Manual Memory Management
+You allocate and deallocate heap memory yourself. But if not done with care, this can lead to crashes, bugs, security vulnerabilities, and memory leaks.
+*** C++ Sample
+You must call free on every pointer you allocate with malloc:
+#+begin_src cpp
+  void foo(size_t n) {
+      int* int_array = malloc(n * sizeof(int));
+      //
+      // ... lots of code
+      //
+      free(int_array);
+  }
+#+end_Src
+Memory is leaked if the function returns early between =malloc= and =free=:
+- The pointer is lost and we cannot deallocate the memory.
+- Worse, freeing the pointer twice, or accessing a freed pointer can lead to exploitable security vulnerabilities.
+** Scope based management
+Constructors and destructors let you hook into the lifetime of an object.
+By wrapping a pointer in an object, you can free memory when the object is destroyed. The compiler guarantees that this happens, even if an exception is raised.
+This is often called /resource acquisition is initialization/ (RAII) and gives you smart pointers.
+
+*** C++ Sample
+#+begin_src cpp
+  void say_hello(std::unique_ptr<Person> person) {
+    std::cout << "Hello " << person->name << std::endl;
+  }
+#+end_src
++ The =std::unique_ptr= object is allocated on the stack, and points to memory allocated on the heap.
++ At the end of =say_hello=, the =std::unique_ptr= destructor will run.
++ The destructor frees the Person object it points to.
+** Automatic Memory Management
+An alternative to manual and scope-based memory management is automatic memory management:
+- The programmer never allocates or deallocates memory explicitly.
+- A garbage collector finds unused memory and deallocates it for the programmer.
+*** Java Example
+The person object is not deallocated after sayHello returns:
+#+begin_src java
+  void sayHello(Person person) {
+    System.out.println("Hello " + person.getName());
+  }
+#+end_src
+
+** Rust Memory Management
+Memory management in Rust is a mix:
+- Safe and correct like Java, but without a garbage collector.
+- Depending on which abstraction (or combination of abstractions)
+  You choose, can be a single unique pointer, reference counted, or atomically reference counted.
+- Scope-based like C++, but the compiler enforces full adherence.
+- A Rust user can choose the right abstraction for the situation, some even have no cost at runtime like C.
+
+** Compare management [[https:google.github.io/comprehensive-rust/memory-management/comparison.html][techniques]] 
