@@ -32,3 +32,8 @@ Put under ~.git/hooks/pre-commit~. It runs as shell code
   #+begin_src rust
     io::stdout()?;
   #+end_src
+** dbg!()
+Can be used to print out debug logs, not for actual printing
+** lib.rs
+A lot like a header file.
+Every file thats mentioned gets a ~pub~ as a pre name
