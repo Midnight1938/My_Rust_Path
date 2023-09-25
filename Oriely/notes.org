@@ -1,0 +1,34 @@
+#+title: hands On system Programming
+#+STARTUP: visual-line-mode
+
+* Info about Cargo
++ Cargo is the Rust package manager
++ ~cargo new~ creates a new project
++ ~cargo new lib~ creates a new library
+    - Unlike a binary, a library doesn't have a ~main~ function
+    - And makes a lib.rs file instead of a main.rs file
++ We can use ~cargo doc~ to generate documentation for the project
+** Manipulation
++ ~cargo build~ builds the project
++ ~cargo run~ builds and runs the project
++ ~cargo check~ checks the project for errors
++ ~cargo test~ runs the tests
+* Generating Projects
+** Gits
+*** Gitignore
+Its best to add ~/target/~ and ~**/*.rs.bk~ to gitignore in order to reduce redundant files
+*** Pre Commit Hook
+It runs a code before comitting code.
+Put under ~.git/hooks/pre-commit~. It runs as shell code
+* Rust
+** Errors
++ For returning errors to console, we can use a ~?~. Which is equivalent to:
+  #+begin_src rust
+    if let Err(e) = io::stdout(){ 
+                return Err(e);
+            };
+  #+end_src
+  - The Easier way being:
+  #+begin_src rust
+    io::stdout()?;
+  #+end_src
