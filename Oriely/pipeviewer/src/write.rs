@@ -1,8 +1,8 @@
 use std::fs::File;
 use std::io::{self, BufWriter, ErrorKind, Result, Write};
-use std::sync::{Arc, Mutex};
+use std::sync::mpsc::Receiver;
 
-pub fn write_loop(outfile: &str, quit: Arc<Mutex<bool>>) -> Result<()> {
+pub fn write_loop(outfile: &str, write_rx: Receiver<Vec<u8>>) -> Result<()> {
     let mut writer: Box<dyn Write> = if !outfile.is_empty() {
         Box::new(BufWriter::new(File::create(outfile)?))
     } else {
@@ -10,14 +10,12 @@ pub fn write_loop(outfile: &str, quit: Arc<Mutex<bool>>) -> Result<()> {
     };
 
     loop {
-        // TODO Recieve Vector of bytes from stats thread
-        let buffer: Vec<u8> = Vec::new(); // ! Temporary
-        { // ? Personal scope so that lock is dropped before write
-            let quit = quit.lock().unwrap();
-            if *quit {
-                break;
-            }
-        }
+        // DONE Recieve Vector of bytes from stats thread
+        let buffer = write_rx.recv().unwrap();
+        if buffer.is_empty() {
+            break;
+        };
+
         if let Err(e) = writer.write_all(&buffer) {
             if e.kind() == ErrorKind::BrokenPipe {
                 return Ok(()); // stop cleanly
