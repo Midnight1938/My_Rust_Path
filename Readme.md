@@ -1,12 +1,11 @@
-#+title: Pipeviewer
-#+date: 29-09-2023
+# Pipeviewer
 
-* About
+## About
 Rust systems application built during the course.
 
 Named: Hands-On Systems Programming with Rust
 
 By: Nathan Stocks
 
-* Whats new
+## Whats new
 Updated to utilize latest versions of Clap, crossterm and crossbeam.

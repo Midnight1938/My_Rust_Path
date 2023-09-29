@@ -9,7 +9,7 @@ pub struct Args {
 
 impl Args {
     pub fn parse() -> Self {
-        let matches = Command::new("pipeview-mdrner")
+        let matches = Command::new(" pipvwmdrn")
             .arg(Arg::new("infile").help("Read from a file instead of stdin"))
             .arg(
                 Arg::new("outfile")

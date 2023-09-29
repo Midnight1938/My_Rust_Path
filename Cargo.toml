@@ -1,12 +1,12 @@
 [package]
-name = "pipeview-mdrn"
+name = "pipvwmdrn"
 version = "0.1.3"
 authors = ["Skshm <eminate894567@pm.me>"]
 edition = "2021"
 description = "Education Edition of the PV utility made with Nathan Stocks"
 homepage = "https://github.com/Midnight1938/My_Rust_Path/tree/pipeviewer"
 repository = "https://github.com/Midnight1938/My_Rust_Path/tree/pipeviewer"
-readme = "Readme.org"
+readme = "Readme.md"
 keywords = ["educational", "course", "nathan"]
 categories = ["command-line-utilities"]
 license = "MIT OR Apache-2.0"

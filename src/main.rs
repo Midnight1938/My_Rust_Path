@@ -1,4 +1,4 @@
-use pipeview-mdrner::{args::Args, read, stats, write}; // args::Args cus binary and lib have same name
+use pipvwmdrn::{args::Args, read, stats, write}; // args::Args cus binary and lib have same name
 use std::io::Result;
 
 use crossbeam::channel::{bounded, unbounded};
