@@ -3,6 +3,8 @@ name = "pipeviewer"
 version = "0.1.3"
 authors = ["Skshm <eminate894567@pm.me>"]
 edition = "2021"
+description = "Education Edition of the PV utility made with Nathan Stocks"
+homepage = ""
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
