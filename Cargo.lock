@@ -266,7 +266,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pipeviewer"
+name = "pipeview-mdrn"
 version = "0.1.3"
 dependencies = [
  "clap",

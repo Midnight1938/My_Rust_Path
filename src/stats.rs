@@ -71,7 +71,7 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
 /// # Example of used Code
 /// This code will be run outside the library
 /// ```rust
-/// use pipeviewer::stats::TimeOutput;
+/// use pipeview-mdrner::stats::TimeOutput;
 /// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
 /// ```
 pub trait TimeOutput {
