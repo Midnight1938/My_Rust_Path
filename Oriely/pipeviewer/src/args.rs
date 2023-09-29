@@ -1,5 +1,5 @@
 use clap::{Arg, Command};
-use std::{env};
+use std::env;
 
 pub struct Args {
     pub infile: String,
@@ -25,18 +25,16 @@ impl Args {
                     .help("Silence the output"),
             )
             .get_matches(); // Get the matches from the command line
-        
-        // Get the infile value from the matches
+
         let infile = matches
             .get_many::<String>("infile")
             .unwrap_or_default()
-            .into_iter().map(|s| s.to_string())
-            .collect();
-        // Get the outfile value. unwrap_or_default sets default value to empty string
+            .map(|s| s.to_string())
+            .collect(); //? Make it a String instead of Option<ValuesFer<'_, String>>
         let outfile = matches
             .get_many::<String>("outfile")
             .unwrap_or_default()
-            .into_iter().map(|s| s.to_string())
+            .map(|s| s.to_string())
             .collect();
         let silent = if matches.contains_id("silent") {
             true

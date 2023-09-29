@@ -1,6 +1,6 @@
 [package]
 name = "pipeviewer"
-version = "0.1.0"
+version = "0.1.3"
 authors = ["Skshm <eminate894567@pm.me>"]
 edition = "2021"
 

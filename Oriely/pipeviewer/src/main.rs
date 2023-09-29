@@ -1,7 +1,7 @@
 use pipeviewer::{args::Args, read, stats, write}; // args::Args cus binary and lib have same name
 use std::io::Result;
 
-use std::sync::mpsc; // multi producer single consumer
+use crossbeam::channel::{bounded, unbounded};
 use std::thread;
 fn main() -> Result<()> {
     let args = Args::parse();
@@ -12,11 +12,11 @@ fn main() -> Result<()> {
     } = args;
 
     // transmitters and receivers
-    let (stats_tx, stats_rx) = mpsc::channel();
-    let (write_tx, write_rx) = mpsc::channel();
+    let (stats_tx, stats_rx) = unbounded();
+    let (write_tx, write_rx) = bounded(1024);
 
-    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx)); // Move is
-    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx)); // {||} closure is a fn that can capture environment around it
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx, write_tx)); // Both channels cuz itll send to both
+    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx)); // {||} closure is a fn that can capture environment around it
     let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx)); // python equivalent of closure is lambda
 
     // Crash if any thread panics

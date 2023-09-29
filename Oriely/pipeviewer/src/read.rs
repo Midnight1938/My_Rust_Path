@@ -1,9 +1,9 @@
 use crate::CHUNK_SIZE;
+use crossbeam::channel::Sender;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
-use std::sync::mpsc::Sender;
 
-pub fn read_loop(infile: &str, stats_tx: Sender<Vec<u8>>) -> Result<()> {
+pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>>) -> Result<()> {
     let mut reader: Box<dyn Read> = if !infile.is_empty() {
         Box::new(BufReader::new(File::open(infile)?))
     } else {
@@ -16,13 +16,13 @@ pub fn read_loop(infile: &str, stats_tx: Sender<Vec<u8>>) -> Result<()> {
             Ok(x) => x,
             Err(_) => break,
         };
-        // DONE Send Buffer to stats thread
-        if stats_tx.send(Vec::from(&buffer[..num_read])).is_err() {
+        let _ = stats_tx.send(num_read); // Dont care if it cant see stats
+        if write_tx.send(Vec::from(&buffer[..num_read])).is_err() {
             break;
         };
     }
-    // DONE Send empty buffer to stats thread if run out of data
-    let _ = stats_tx.send(Vec::new());
+    let _ = stats_tx.send(0);
+    let _ = write_tx.send(Vec::new()); // empty vec
 
     Ok(())
 }
