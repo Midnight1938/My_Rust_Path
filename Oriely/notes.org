@@ -37,3 +37,6 @@ Can be used to print out debug logs, not for actual printing
 ** lib.rs
 A lot like a header file.
 Every file thats mentioned gets a ~pub~ as a pre name
+** Documentation
++ ~//!~ means documenting the enclosing item.
++ ~///~ Documents the item below it

@@ -1,3 +1,8 @@
+//! Contains the code necessary to output data to the console
+//! 
+//! # Loops
+//! It loops through the data parsed in order to output it
+
 mod timer;
 
 use crossbeam::channel::Receiver;
@@ -61,10 +66,19 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
     let _ = stderr.flush();
 }
 
-trait TimeOutput {
+/// TimeOutput trait adds the `.as_time()` function which pretty prints the elapsed time
+/// 
+/// # Example of used Code
+/// This code will be run outside the library
+/// ```rust
+/// use pipeviewer::stats::TimeOutput;
+/// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
+/// ```
+pub trait TimeOutput {
     fn as_time(&self) -> String;
 }
 impl TimeOutput for u64 {
+    /// Renders a u64 into a time string
     fn as_time(&self) -> String {
         let (hours, left) = (*self / 3600, *self % 3600);
         let (minutes, seconds) = (left / 60, left % 60);
