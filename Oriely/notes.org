@@ -40,3 +40,16 @@ Every file thats mentioned gets a ~pub~ as a pre name
 ** Documentation
 + ~//!~ means documenting the enclosing item.
 + ~///~ Documents the item below it
++ It utilizes usual markdown syntax.\
++ The Code written in the markdown runs outside the library.
+** Semantic Versioning
+X.Y.Z = major.minor.patch
+*** Rules
++ When < 1.0.0
+  - 1.y is a breaking change
+  - 1.0.z is a whatever change
++ WHen >= 1.0.0
+  Uses [[https:semver.org/][Normal Semantic Versions]]
+  - Major = Breaking Change
+  - Minor = Adding Functionality
+  - Patch = Bug Fixes
