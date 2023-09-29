@@ -25,7 +25,8 @@ impl Args {
                     .help("Silence the output"),
             )
             .get_matches(); // Get the matches from the command line
-                            // Get the infile value from the matches
+        
+        // Get the infile value from the matches
         let infile = matches
             .get_many::<String>("infile")
             .unwrap_or_default()

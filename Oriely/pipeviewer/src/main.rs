@@ -15,8 +15,8 @@ fn main() -> Result<()> {
     let (stats_tx, stats_rx) = mpsc::channel();
     let (write_tx, write_rx) = mpsc::channel();
 
-    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx)); // || means closure, move means take ownership of infile
-    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx)); // closure is a fn that can capture environment around it
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx)); // Move is
+    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx)); // {||} closure is a fn that can capture environment around it
     let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx)); // python equivalent of closure is lambda
 
     // Crash if any thread panics
