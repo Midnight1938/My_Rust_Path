@@ -1,6 +1,6 @@
 [package]
 name = "pipvwmdrn"
-version = "0.1.3"
+version = "0.1.31"
 authors = ["Skshm <eminate894567@pm.me>"]
 edition = "2021"
 description = "Education Edition of the PV utility made with Nathan Stocks"
