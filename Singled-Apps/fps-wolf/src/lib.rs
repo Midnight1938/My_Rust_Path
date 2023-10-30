@@ -64,7 +64,7 @@ static mut STATE: State = State {
     player_angle: 0.0,
 };
 
-const FOV: f32 = PI / 2.7; // The player's field of view.
+const FOV: f32 = PI / 2.9; // The player's field of view.
 const HALF_FOV: f32 = FOV * 0.5; // Half the player's field of view.
 const ANGLE_STEP: f32 = FOV / 160.0; // The angle between each ray.
 const WALL_HEIGHT: f32 = 100.0; // A magic number.
@@ -193,13 +193,13 @@ impl State {
         let mut next_x = first_x;
         let mut next_y = first_y;
 
-        // This is the loop where the ray is extended until it hits
-        // the wall. It's not an infinite loop as implied in the
-        // explanation, instead it only goes from 0 to 256.
-        //
-        // This was chosen because if something goes wrong and the
-        // ray never hits a wall (which should never happen) the
-        // loop will eventually quit and the game will keep on running.
+        /* This is the loop where the ray is extended until it hits
+           the wall. It's not an infinite loop as implied in the
+           explanation, instead it only goes from 0 to 256.
+           This was chosen because if something goes wrong and the
+           ray never hits a wall (which should never happen) the
+           loop will eventually quit and the game will keep on running.
+        */ 
         for _ in 0..256 {
             // current_x and current_y are where the ray is currently
             // on the map, while next_x and next_y are relative
