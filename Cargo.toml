@@ -1,7 +1,7 @@
 [package]
 name = "pipvwmdrn"
 version = "0.1.31"
-authors = ["Skshm <eminate894567@pm.me>"]
+authors = ["Skshm <eminate894567@skiff.com>"]
 edition = "2021"
 description = "Education Edition of the PV utility made with Nathan Stocks"
 homepage = "https://github.com/Midnight1938/My_Rust_Path/tree/pipeviewer"
