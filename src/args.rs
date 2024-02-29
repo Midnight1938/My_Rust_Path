@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{Arg, ArgMatches, Command};
 use std::env;
 
 pub struct Args {
@@ -14,19 +14,19 @@ impl Args {
             .arg(Arg::new("infile").help("Read from a file instead of stdin"))
             .arg(
                 Arg::new("outfile")
-                    .short("o")
+                    .short('o')
                     .long("outfile")
                     .help("Write output to a file instead of stdout"),
             )
             .arg(
                 Arg::new("key")
-                    .short("d")
+                    .short('d')
                     .long("key")
                     .help("Decrypt Encrypted File"),
             )
             .arg(
                 Arg::new("silence")
-                    .short("s")
+                    .short('s')
                     .long("silent")
                     .help("Disable Verbosity"),
             )
@@ -40,13 +40,13 @@ impl Args {
             .get_many::<String>("outfile")
             .unwrap_or_default()
             .map(|s| s.to_string()).collect();
-        let decrypt: bool = if matches.contains_id("reveal") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
+        let key: bool = if matches.contains_id("reveal") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
         let silence: bool = if matches.contains_id("silent") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
 
         Self {
             infile,
             outfile,
-            decrypt,
+            key,
             silence,
         }
     }
