@@ -1,5 +1,5 @@
 //! Contains the code necessary to output data to the console
-//!
+//! 
 //! # Loops
 //! It loops through the data parsed in order to output it
 
@@ -67,11 +67,11 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
 }
 
 /// TimeOutput trait adds the `.as_time()` function which pretty prints the elapsed time
-///
+/// 
 /// # Example of used Code
 /// This code will be run outside the library
 /// ```rust
-/// use filencryp::stats::TimeOutput;
+/// use pipvwmdrn::stats::TimeOutput;
 /// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
 /// ```
 pub trait TimeOutput {
@@ -98,9 +98,9 @@ mod tests {
             (60_u64, "0:01:00"),
             (154_u64, "0:02:34"),
             (3603_u64, "1:00:03"),
-        ];
-        for (input, output) in pairs{
-            assert_eq!(input.as_time().as_str(), output);
-        }
+            ];
+            for (input, output) in pairs{
+                assert_eq!(input.as_time().as_str(), output);
+            }
     }
 }

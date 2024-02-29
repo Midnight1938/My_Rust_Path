@@ -1,53 +1,51 @@
-use clap::{Arg, ArgMatches, Command};
+use clap::{Arg, Command};
 use std::env;
 
 pub struct Args {
     pub infile: String,
     pub outfile: String,
-    pub decrypt: bool,
-    pub silence: bool,
+    pub silent: bool,
 }
 
 impl Args {
     pub fn parse() -> Self {
-        let matches: ArgMatches = Command::new("filencryp")
+        let matches = Command::new(" pipvwmdrn")
             .arg(Arg::new("infile").help("Read from a file instead of stdin"))
             .arg(
                 Arg::new("outfile")
                     .short('o')
                     .long("outfile")
-                    .help("Write output to a file instead of stdout"),
+                    // .takes_value(true)
+                    .help("Write output to file instead of stdout"),
             )
             .arg(
-                Arg::new("decrypt")
-                    .short('d')
-                    .long("decrypt")
-                    .help("Decrypt Encrypted File"),
-            )
-            .arg(
-                Arg::new("silence")
+                Arg::new("silent")
                     .short('s')
                     .long("silent")
-                    .help("Disable Verbosity"),
+                    .help("Silence the output"),
             )
-            .get_matches();
+            .get_matches(); // Get the matches from the command line
 
-        let infile: String = matches
+        let infile = matches
             .get_many::<String>("infile")
             .unwrap_or_default()
-            .map(|s| s.to_string()).collect();
-        let outfile: String = matches
+            .map(|s| s.to_string())
+            .collect(); //? Make it a String instead of Option<ValuesFer<'_, String>>
+        let outfile = matches
             .get_many::<String>("outfile")
             .unwrap_or_default()
-            .map(|s| s.to_string()).collect();
-        let decrypt = std::env::args().any(|arg| arg == "decrypt");
-        let silence: bool = if matches.contains_id("silent") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
-
+            .map(|s| s.to_string())
+            .collect();
+        let silent = if matches.contains_id("silent") {
+            true
+        } else {
+            !env::var("PV_SILENT").unwrap_or_default().is_empty()
+        }; // Get the silent value from the matches
+           // dbg!(infile, outfile, silent);
         Self {
             infile,
             outfile,
-            decrypt,
-            silence,
+            silent,
         }
     }
 }
