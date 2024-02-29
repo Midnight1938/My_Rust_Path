@@ -5,11 +5,12 @@ pub struct Args {
     pub infile: String,
     pub outfile: String,
     pub silent: bool,
+    pub decrypt: bool,
 }
 
 impl Args {
     pub fn parse() -> Self {
-        let matches = Command::new(" pipvwmdrn")
+        let matches = Command::new(" filencryp")
             .arg(Arg::new("infile").help("Read from a file instead of stdin"))
             .arg(
                 Arg::new("outfile")
@@ -24,6 +25,12 @@ impl Args {
                     .long("silent")
                     .help("Silence the output"),
             )
+            .arg(
+                Arg::new("decrypt")
+                    .short('d')
+                    .long("decrypt")
+                    .help("Indicate Decryption")
+            )
             .get_matches(); // Get the matches from the command line
 
         let infile = matches
@@ -36,16 +43,19 @@ impl Args {
             .unwrap_or_default()
             .map(|s| s.to_string())
             .collect();
+
         let silent = if matches.contains_id("silent") {
             true
         } else {
             !env::var("PV_SILENT").unwrap_or_default().is_empty()
         }; // Get the silent value from the matches
            // dbg!(infile, outfile, silent);
+        let decrypt = std::env::args().any(|arg| arg == "decrypt");
         Self {
             infile,
             outfile,
             silent,
+            decrypt,
         }
     }
 }
