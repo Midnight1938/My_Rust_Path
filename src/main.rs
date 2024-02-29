@@ -1,23 +1,37 @@
-use aes_gcm::{aead::{Aead, KeyInit, OsRng}, Aes256Gcm, Nonce};
+use filencryp::{args::Args, read, stats, write}; // args::Args cus binary and lib have same name
 
-fn main() {
-    // Generate a random encryption key
-    let key = Aes256Gcm::generate_key(&mut OsRng);
+use std::io::Result;
 
-    // Create a new cipher with the generated key
-    let cipher = Aes256Gcm::new(&key);
+use crossbeam::channel::{bounded, unbounded};
+use std::thread;
 
-    // Create a unique nonce (96 bits) for this message
-    let nonce = Nonce::from_slice(b"unique nonce");
+fn main() -> Result<()> {
+    let args = Args::parse();
+    let Args {
+        infile,
+        outfile,
+        decrypt,
+        silence,
+    } = args;
 
-    // Encrypt a plaintext message
-    let plaintext = b"plaintext message";
-    let ciphertext = cipher.encrypt(nonce, plaintext.as_ref()).unwrap();
+    // transmitters and receivers
+    let (stats_tx, stats_rx) = unbounded();
+    let (write_tx, write_rx) = bounded(1024);
 
-    // Decrypt the ciphertext
-    let decrypted = cipher.decrypt(nonce, ciphertext.as_ref()).unwrap();
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx, write_tx, decrypt)); // Both channels cuz itll send to both
+    let stats_handle = thread::spawn(move || stats::stats_loop(silence, stats_rx)); // {||} closure is a fn that can capture environment around it
+    let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx)); // python equivalent of closure is lambda
 
-    println!("Encrypted plaintext: {:?}", ciphertext);
-    println!("Nonce: {:?}", nonce);
-    println!("Decrypted plaintext: {:?}", String::from_utf8(decrypted).unwrap());
+    // Crash if any thread panics
+    // .join returns a thread::Result<io::Result<()>>.
+    let read_io_result = read_handle.join().unwrap();
+    let stats_io_result = stats_handle.join().unwrap();
+    let write_io_result = write_handle.join().unwrap();
+
+    // Return error if any thread is an error
+    read_io_result?;
+    stats_io_result?;
+    write_io_result?;
+
+    Ok(())
 }

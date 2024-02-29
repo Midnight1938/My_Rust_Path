@@ -4,7 +4,7 @@ use std::env;
 pub struct Args {
     pub infile: String,
     pub outfile: String,
-    pub key: bool,
+    pub decrypt: bool,
     pub silence: bool,
 }
 
@@ -19,9 +19,9 @@ impl Args {
                     .help("Write output to a file instead of stdout"),
             )
             .arg(
-                Arg::new("key")
+                Arg::new("decrypt")
                     .short('d')
-                    .long("key")
+                    .long("decrypt")
                     .help("Decrypt Encrypted File"),
             )
             .arg(
@@ -40,13 +40,13 @@ impl Args {
             .get_many::<String>("outfile")
             .unwrap_or_default()
             .map(|s| s.to_string()).collect();
-        let key: bool = if matches.contains_id("reveal") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
+        let decrypt = std::env::args().any(|arg| arg == "decrypt");
         let silence: bool = if matches.contains_id("silent") { true } else { !env::var("PV_SILENT").unwrap_or_default().is_empty() };
 
         Self {
             infile,
             outfile,
-            key,
+            decrypt,
             silence,
         }
     }
