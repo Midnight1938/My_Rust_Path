@@ -5,7 +5,7 @@ pub struct Args {
     pub infile: String,
     pub outfile: String,
     pub silent: bool,
-    pub decrypt: bool,
+    pub decrypt: String,
 }
 
 impl Args {
@@ -50,7 +50,11 @@ impl Args {
             !env::var("PV_SILENT").unwrap_or_default().is_empty()
         }; // Get the silent value from the matches
            // dbg!(infile, outfile, silent);
-        let decrypt: bool = matches.get_flag("decrypt");
+        let decrypt= matches
+            .get_many::<String>("decrypt")
+            .unwrap_or_default()
+            .map(|s| s.to_string())
+            .collect();
         Self {
             infile,
             outfile,

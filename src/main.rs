@@ -16,7 +16,7 @@ fn main() -> Result<()> {
     let (stats_tx, stats_rx) = unbounded();
     let (write_tx, write_rx) = bounded(1024);
 
-    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx, write_tx, decrypt)); // Both channels cuz itll send to both
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx, write_tx, &decrypt)); // Both channels cuz itll send to both
     let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx)); // {||} closure is a fn that can capture environment around it
     let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx)); // python equivalent of closure is lambda
 
