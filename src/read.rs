@@ -2,7 +2,9 @@ use crate::CHUNK_SIZE;
 use crossbeam::channel::Sender;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
-use aes_gcm::{Key, aead::{Aead, KeyInit, OsRng}, Aes256Gcm, Nonce};
+use aes_gcm::{aead::{Aead, KeyInit, OsRng}, Aes256Gcm, Nonce, AesGcm};
+use aes_gcm::aead::consts::U12;
+use aes_gcm::aes::Aes256;
 use rand::{RngCore};
 
 pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>>, decrypt: &str) -> Result<()> {
@@ -16,6 +18,7 @@ pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>
     // Reuse key and nonce bytes
     let key = Aes256Gcm::generate_key(&mut OsRng);
     let mut nonce_bytes = [0; 12];
+    let cipher = Aes256Gcm::new(&key);
     OsRng.fill_bytes(&mut nonce_bytes);
 
     loop {
@@ -27,7 +30,7 @@ pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>
         let _ = stats_tx.send(num_read); // Don't care if it can't send stats
 
         // TODO Decryption
-        if write_tx.send(Vec::from(scrambler(decrypt, num_read, &buffer, &key, &nonce_bytes))).is_err() {
+        if write_tx.send(Vec::from(scrambler(decrypt, num_read, &buffer, &cipher, &nonce_bytes))).is_err() {
             break;
         }
     }
@@ -37,14 +40,12 @@ pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>
     Ok(())
 }
 
-pub fn scrambler(decrypt: &str, num_read: usize, buffer: &[u8], key: &Key<Aes256Gcm>, nonce_bytes: &[u8; 12]) -> Vec<u8> {
+pub fn scrambler(decrypt: &str, num_read: usize, buffer: &[u8], cipher: &AesGcm<Aes256, U12>, nonce_bytes: &[u8; 12]) -> Vec<u8> {
     if !decrypt.is_empty() {
         let nonce = Nonce::from_slice(&decrypt.as_bytes());
-        let cipher = Aes256Gcm::new(key);
         cipher.decrypt(nonce, &buffer[..num_read]).unwrap().to_vec()
     } else {
         let nonce = Nonce::from_slice(nonce_bytes);
-        let cipher = Aes256Gcm::new(key);
         let ciphertext = cipher.encrypt(nonce, &buffer[..num_read]).unwrap();
 
         // Include the nonce in the encrypted data
