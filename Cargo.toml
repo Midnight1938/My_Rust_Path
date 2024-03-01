@@ -7,11 +7,8 @@ edition = "2021"
 
 [dependencies]
 clap = "4.5.1"
-crypto = "0.5.1"
 rand = "0.8.5"
 crossbeam = "0.8.4"
 crossterm = "0.27.0"
 aes-gcm = "0.10.3"
-sha2 = "0.11.0-pre.3"
-zeroize = "1.7.0"
 rpassword = "7.3.1"

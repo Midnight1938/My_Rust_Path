@@ -50,7 +50,7 @@ impl Args {
             !env::var("PV_SILENT").unwrap_or_default().is_empty()
         }; // Get the silent value from the matches
            // dbg!(infile, outfile, silent);
-        let decrypt = std::env::args().any(|arg| arg == "decrypt");
+        let decrypt: bool = matches.get_flag("decrypt");
         Self {
             infile,
             outfile,
