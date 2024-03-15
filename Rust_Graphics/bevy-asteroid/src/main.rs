@@ -11,8 +11,8 @@ use bevy::{
 };
 use bevy::core::FrameCount;
 
-const VIEWPORT_WIDTH: usize = 1280;
-const VIEWPORT_HEIGHT: usize = 960;
+const VIEWPORT_WIDTH: usize = 852;
+const VIEWPORT_HEIGHT: usize = 480;
 const VIEWPORT_MAX_X: f32 = VIEWPORT_WIDTH as f32 / 2.0;
 const VIEWPORT_MIN_X: f32 = -VIEWPORT_MAX_X;
 const VIEWPORT_MAX_Y: f32 = VIEWPORT_HEIGHT as f32 / 2.0;
@@ -99,7 +99,7 @@ struct Asteroids {
 impl AsteroidSize {
     fn scale(&self) -> f32 {
         match self {
-            AsteroidSize::Big => 100.,
+            AsteroidSize::Big => 90.,
             AsteroidSize::Medium => 60.,
             AsteroidSize::Small => 30.,
         }
@@ -324,7 +324,7 @@ fn setup(
         ..default()
     }).insert(Starship { rotation: 0. }).insert(Position(Vec2::splat(0.))).insert(Velocity(Vec2::splat(0.)));
 
-    for _ in 0..5 {
+    for _ in 0..4 {
         spawn_asteroid(AsteroidSize::Big, get_rand_pt(), &mut commands, &mut meshes, &mut materials);
     }
 }
